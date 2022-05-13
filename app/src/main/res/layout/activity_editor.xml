@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditorActivity">
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_image"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/photo" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="4dp"
+        android:textSize="15sp"
+        android:id="@+id/textHint"
+        android:text="点击来添加头像"
+        android:textStyle="bold"
+        android:layout_below="@+id/profile_image" />
+
+    <EditText
+        android:id="@+id/nameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textHint"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginRight="50dp"
+        android:hint="姓名" />
+
+    <EditText
+        android:layout_width="135dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/phoneEditText"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginLeft="50dp"
+        android:layout_below="@+id/nameEditText"
+        android:inputType="number"
+        android:hint="手机号码"/>
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/nameEditText"
+        android:layout_marginTop="45dp"
+        android:layout_marginRight="50dp"
+        android:layout_toRightOf="@+id/phoneEditText" />
+
+    <EditText
+        android:id="@+id/emailEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/phoneEditText"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginRight="50dp"
+        android:hint="邮箱" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/workEditText"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginLeft="50dp"
+        android:layout_below="@+id/emailEditText"
+        android:layout_centerInParent="true"
+        android:hint="工作单位"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/homeEditText"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginLeft="50dp"
+        android:layout_below="@+id/workEditText"
+        android:layout_centerInParent="true"
+        android:hint="家庭住址"/>
+
+
+</RelativeLayout>
