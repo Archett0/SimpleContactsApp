@@ -406,6 +406,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     }
     // 到这里结束
 
+    // 编辑界面的用户返回确认功能
     private void showUnsavedChangesDialog(
             DialogInterface.OnClickListener discardButtonClickListener) {
         // Create an AlertDialog.Builder and set the message, and click listeners
@@ -428,9 +429,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         alertDialog.show();
     }
 
-    /**
-     * Prompt the user to confirm that they want to delete this product.
-     */
+    // 编辑界面的确认删除功能
     private void showDeleteConfirmationDialog() {
         // Create an AlertDialog.Builder and set the message, and click listeners
         // for the positive and negative buttons on the dialog.
@@ -457,9 +456,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         alertDialog.show();
     }
 
-    /**
-     * Perform the deletion of the product in the database.
-     */
+    // 删除选中的联系人
     private void deleteProduct() {
         // Only perform the delete if this is an existing product.
         if (mCurrentContactUri != null) {
@@ -484,6 +481,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         finish();
     }
 
+    // 在编辑页面按下返回键
     @Override
     public void onBackPressed() {
         // If the product hasn't changed, continue with handling back button press

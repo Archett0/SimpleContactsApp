@@ -32,6 +32,7 @@ public class Provider extends ContentProvider {
     }
 
     @Override
+    //                   Table          Columns        Where Column =           Value           Order By Column
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         // 查询方法只需要读，拿可读就够了
         SQLiteDatabase database = mDbHelper.getReadableDatabase();
