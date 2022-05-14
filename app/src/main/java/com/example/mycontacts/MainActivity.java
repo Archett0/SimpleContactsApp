@@ -8,6 +8,10 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,12 +23,23 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public ListView listView;
     public Adapter mAdapter;
     public static final int CONTACTLOADER = 0;
+    public static int LIST_COUNT = 0;
+    public static ArrayList<ContactModel> RECENT_CONTACT = new ArrayList<>();
+    public Context mainContext = null;
+    public Handler handler;
+    public Timer timer;
+
 
     // 模糊搜索名字
     @Override
@@ -56,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                     args = null;
                 } else {
                     selection = Contract.ContactEntry.COLUMN_NAME + " like ?";
-                    args = new String[]{"%"+s+"%"};
+                    args = new String[]{"%" + s + "%"};
                 }
                 mAdapter = new Adapter(thisContext,
                         getContentResolver().query(Contract.ContactEntry.CONTENT_URI,
@@ -77,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                     args = null;
                 } else {
                     selection = Contract.ContactEntry.COLUMN_NAME + " like ?";
-                    args = new String[]{"%"+s+"%"};
+                    args = new String[]{"%" + s + "%"};
                 }
                 mAdapter = new Adapter(thisContext,
                         getContentResolver().query(Contract.ContactEntry.CONTENT_URI,
@@ -86,9 +101,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                                 args,
                                 null));
                 if (args == null) {
-                    Log.i("Query", "selection=" + "null" + " args=" + "null" + " ");
+                    Log.i("QueryName", "selection: " + "null" + " args: " + "null" + " ");
                 } else {
-                    Log.i("Query", "selection=" + selection + " args[0]=" + args[0] + " ");
+                    Log.i("QueryName", "selection: " + selection + " args[0]: " + args[0] + " ");
                 }
                 listView.setAdapter(mAdapter);
                 return false;
@@ -118,6 +133,33 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mAdapter = new Adapter(this, null);
         listView.setAdapter(mAdapter);
 
+        // 定时Toast
+        mainContext = this;
+        handler = new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                super.handleMessage(msg);
+                if (RECENT_CONTACT != null && !RECENT_CONTACT.isEmpty()) {
+                    String countMessage = "目前条目数量:" + LIST_COUNT;
+                    Toast.makeText(mainContext, countMessage, Toast.LENGTH_SHORT).show();
+                    for (int i = 0; i < RECENT_CONTACT.size(); ++i) {
+                        String message = RECENT_CONTACT.get(i).showContact();
+                        Toast.makeText(mainContext, message, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(mainContext, "没有最近更改的项目", Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Message message = new Message();
+                handler.sendMessage(message);
+            }
+        }, 0, 20000);
+
         // 点击列表项的事件
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -126,12 +168,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 Uri newUri = ContentUris.withAppendedId(Contract.ContactEntry.CONTENT_URI, id);
                 intent.setData(newUri);
                 startActivity(intent);
-
             }
         });
 
         // 激活Loader
         getLoaderManager().initLoader(CONTACTLOADER, null, this);
+
+        // Timer&Toast
+
     }
 
     @Override
@@ -156,7 +200,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
+        LIST_COUNT = data.getCount();
+        Log.i("LIST COUNT", String.valueOf(LIST_COUNT));
+        Log.i("LIST COUNT", String.valueOf(data.getCount()));
         mAdapter.swapCursor(data);
     }
 
@@ -164,5 +210,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public void onLoaderReset(Loader<Cursor> loader) {
 
         mAdapter.swapCursor(null);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        timer.cancel();
     }
 }

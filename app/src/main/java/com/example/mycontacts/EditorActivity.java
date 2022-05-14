@@ -6,6 +6,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
@@ -22,6 +23,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -76,13 +78,13 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         // 新建联系人
         if (mCurrentContactUri == null) {
             mPhoto.setImageResource(R.drawable.photo);
-            setTitle("Add a Contact");
+            setTitle("新建联系人");
             // 在新建联系人时隐藏删除按钮
             invalidateOptionsMenu();
 
             // 修改联系人
         } else {
-            setTitle("Edit a Contact");
+            setTitle("修改联系人");
             getLoaderManager().initLoader(LOADER, null, this);
 
         }
@@ -409,8 +411,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     // 编辑界面的用户返回确认功能
     private void showUnsavedChangesDialog(
             DialogInterface.OnClickListener discardButtonClickListener) {
-        // Create an AlertDialog.Builder and set the message, and click listeners
-        // for the positive and negative buttons on the dialog.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.unsaved_changes_dialog_msg);
         builder.setPositiveButton(R.string.discard, discardButtonClickListener);
@@ -460,23 +460,16 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private void deleteProduct() {
         // Only perform the delete if this is an existing product.
         if (mCurrentContactUri != null) {
-            // Call the ContentResolver to delete the product at the given content URI.
-            // Pass in null for the selection and selection args because the mCurrentProductUri
-            // content URI already identifies the product that we want.
             int rowsDeleted = getContentResolver().delete(mCurrentContactUri, null, null);
-
-            // Show a toast message depending on whether or not the delete was successful.
             if (rowsDeleted == 0) {
-                // If no rows were deleted, then there was an error with the delete.
+                // 如果没有一行被删除，报错toast
                 Toast.makeText(this, getString(R.string.editor_delete_product_failed),
                         Toast.LENGTH_SHORT).show();
             } else {
-                // Otherwise, the delete was successful and we can display a toast.
                 Toast.makeText(this, getString(R.string.editor_delete_product_successful),
                         Toast.LENGTH_SHORT).show();
             }
         }
-
         // Close the activity
         finish();
     }

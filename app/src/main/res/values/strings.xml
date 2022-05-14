@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyContacts</string>
+    <string name="app_name">联系人</string>
     <string name="workphone">Work</string>
 
     <string name="homephone">Home</string>
@@ -81,10 +81,10 @@
     <string name="keep_editing">继续编辑</string>
 
     <!-- Toast message in editor when current product was successfully deleted [CHAR LIMIT=NONE] -->
-    <string name="editor_delete_product_successful">Item deleted</string>
+    <string name="editor_delete_product_successful">删除成功</string>
 
     <!-- Toast message in editor when current product has failed to be deleted [CHAR LIMIT=NONE] -->
-    <string name="editor_delete_product_failed">Error with deleting item</string>
+    <string name="editor_delete_product_failed">删除出错</string>
 
     <!-- Dialog message to ask the user to confirm deleting the current product [CHAR LIMIT=NONE] -->
     <string name="delete_dialog_msg">删除这个联系人？</string>

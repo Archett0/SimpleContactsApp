@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.net.URI;
 
@@ -121,9 +122,14 @@ public class Provider extends ContentProvider {
             return null;
         }
         getContext().getContentResolver().notifyChange(uri, null);
+        ContactModel newContact = new ContactModel(name, number, "已添加");
+        if (MainActivity.RECENT_CONTACT.size() >= 3) {
+            MainActivity.RECENT_CONTACT.remove(0);
+        }
+        MainActivity.RECENT_CONTACT.add(newContact);
+        Log.i("RECENT CONTACT", "Contact added:" + newContact.toString());
+
         return ContentUris.withAppendedId(uri, id);
-
-
     }
 
     @Override
@@ -176,9 +182,11 @@ public class Provider extends ContentProvider {
     }
 
     private int updateContact(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-
+        String alteredName = "";
+        String alteredPhone = "";
         if (values.containsKey(Contract.ContactEntry.COLUMN_NAME)) {
             String name = values.getAsString(Contract.ContactEntry.COLUMN_NAME);
+            alteredName = name;
             if (name == null) {
                 throw new IllegalArgumentException("Name is required");
             }
@@ -187,6 +195,7 @@ public class Provider extends ContentProvider {
         if (values.containsKey(Contract.ContactEntry.COLUMN_PHONENUMBER)) {
 
             String number = values.getAsString(Contract.ContactEntry.COLUMN_PHONENUMBER);
+            alteredPhone = number;
             if (number == null) {
                 throw new IllegalArgumentException("number is required");
             }
@@ -228,6 +237,18 @@ public class Provider extends ContentProvider {
         int rowsUpdated = database.update(Contract.ContactEntry.TABLE_NAME, values, selection, selectionArgs);
         if (rowsUpdated != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
+            ContactModel newContact = new ContactModel(alteredName, alteredPhone, "已修改");
+            if (MainActivity.RECENT_CONTACT.size() >= 3) {
+                MainActivity.RECENT_CONTACT.remove(0);
+            }
+            MainActivity.RECENT_CONTACT.add(newContact);
+            Log.i("RECENT CONTACT", "Contact altered:" + newContact);
+            Log.i("RECENT CONTACT", "List size:" + MainActivity.RECENT_CONTACT.size());
+            for (int i = 0; i < MainActivity.RECENT_CONTACT.size(); ++i) {
+                Log.i("RECENT CONTACT", "Recent List:" + MainActivity.RECENT_CONTACT.get(i));
+            }
+
+
         }
         return rowsUpdated;
     }
