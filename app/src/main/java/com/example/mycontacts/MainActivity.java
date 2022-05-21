@@ -50,14 +50,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         SearchView searchView = (SearchView) menuItem.getActionView();
         searchView.setQueryHint("输入要搜索的姓名");
 
-        String[] projection = {Contract.ContactEntry._ID,
-                Contract.ContactEntry.COLUMN_NAME,
-                Contract.ContactEntry.COLUMN_EMAIL,
-                Contract.ContactEntry.COLUMN_PICTURE,
-                Contract.ContactEntry.COLUMN_PHONENUMBER,
-                Contract.ContactEntry.COLUMN_WORKPLACE,
-                Contract.ContactEntry.COLUMN_HOMEPLACE,
-                Contract.ContactEntry.COLUMN_TYPEOFCONTACT
+        String[] projection = {Contact.ContactEntry._ID,
+                Contact.ContactEntry.COLUMN_NAME,
+                Contact.ContactEntry.COLUMN_EMAIL,
+                Contact.ContactEntry.COLUMN_PICTURE,
+                Contact.ContactEntry.COLUMN_PHONENUMBER,
+                Contact.ContactEntry.COLUMN_WORKPLACE,
+                Contact.ContactEntry.COLUMN_HOMEPLACE,
+                Contact.ContactEntry.COLUMN_TYPEOFCONTACT
         };
         Context thisContext = this;
 
@@ -70,11 +70,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                     selection = null;
                     args = null;
                 } else {
-                    selection = Contract.ContactEntry.COLUMN_NAME + " like ?";
+                    selection = Contact.ContactEntry.COLUMN_NAME + " like ?";
                     args = new String[]{"%" + s + "%"};
                 }
                 mAdapter = new Adapter(thisContext,
-                        getContentResolver().query(Contract.ContactEntry.CONTENT_URI,
+                        getContentResolver().query(Contact.ContactEntry.CONTENT_URI,
                                 projection,
                                 selection,
                                 args,
@@ -91,11 +91,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                     selection = null;
                     args = null;
                 } else {
-                    selection = Contract.ContactEntry.COLUMN_NAME + " like ?";
+                    selection = Contact.ContactEntry.COLUMN_NAME + " like ?";
                     args = new String[]{"%" + s + "%"};
                 }
                 mAdapter = new Adapter(thisContext,
-                        getContentResolver().query(Contract.ContactEntry.CONTENT_URI,
+                        getContentResolver().query(Contact.ContactEntry.CONTENT_URI,
                                 projection,
                                 selection,
                                 args,
@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(MainActivity.this, EditorActivity.class);
-                Uri newUri = ContentUris.withAppendedId(Contract.ContactEntry.CONTENT_URI, id);
+                Uri newUri = ContentUris.withAppendedId(Contact.ContactEntry.CONTENT_URI, id);
                 intent.setData(newUri);
                 startActivity(intent);
             }
@@ -181,17 +181,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-        String[] projection = {Contract.ContactEntry._ID,
-                Contract.ContactEntry.COLUMN_NAME,
-                Contract.ContactEntry.COLUMN_EMAIL,
-                Contract.ContactEntry.COLUMN_PICTURE,
-                Contract.ContactEntry.COLUMN_PHONENUMBER,
-                Contract.ContactEntry.COLUMN_WORKPLACE,
-                Contract.ContactEntry.COLUMN_HOMEPLACE,
-                Contract.ContactEntry.COLUMN_TYPEOFCONTACT
+        String[] projection = {Contact.ContactEntry._ID,
+                Contact.ContactEntry.COLUMN_NAME,
+                Contact.ContactEntry.COLUMN_EMAIL,
+                Contact.ContactEntry.COLUMN_PICTURE,
+                Contact.ContactEntry.COLUMN_PHONENUMBER,
+                Contact.ContactEntry.COLUMN_WORKPLACE,
+                Contact.ContactEntry.COLUMN_HOMEPLACE,
+                Contact.ContactEntry.COLUMN_TYPEOFCONTACT
         };
 
-        return new CursorLoader(this, Contract.ContactEntry.CONTENT_URI,
+        return new CursorLoader(this, Contact.ContactEntry.CONTENT_URI,
                 projection, null,
                 null,
                 null);

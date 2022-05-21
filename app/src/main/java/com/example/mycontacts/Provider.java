@@ -7,11 +7,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
-
-import java.net.URI;
 
 public class Provider extends ContentProvider {
 
@@ -20,8 +16,8 @@ public class Provider extends ContentProvider {
     public static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
-        sUriMatcher.addURI(Contract.CONTENT_AUTHORITY, Contract.PATH_CONTACTS, CONTACTS);
-        sUriMatcher.addURI(Contract.CONTENT_AUTHORITY, Contract.PATH_CONTACTS + "/#", CONTACTS_ID); // 代表列名的#
+        sUriMatcher.addURI(Contact.CONTENT_AUTHORITY, Contact.PATH_CONTACTS, CONTACTS);
+        sUriMatcher.addURI(Contact.CONTENT_AUTHORITY, Contact.PATH_CONTACTS + "/#", CONTACTS_ID); // 代表列名的#
     }
 
     public DbHelper mDbHelper;  // DhHelper
@@ -44,13 +40,13 @@ public class Provider extends ContentProvider {
         int match = sUriMatcher.match(uri);
         switch (match) {
             case CONTACTS:
-                cursor = database.query(Contract.ContactEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                cursor = database.query(Contact.ContactEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
 
             case CONTACTS_ID:
-                selection = Contract.ContactEntry._ID + "=?";
+                selection = Contact.ContactEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                cursor = database.query(Contract.ContactEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                cursor = database.query(Contact.ContactEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
 
             default:
@@ -84,39 +80,39 @@ public class Provider extends ContentProvider {
 
     private Uri insertContact(Uri uri, ContentValues values) {
 
-        String name = values.getAsString(Contract.ContactEntry.COLUMN_NAME);
+        String name = values.getAsString(Contact.ContactEntry.COLUMN_NAME);
         if (name == null) {
             throw new IllegalArgumentException("Name is required");
         }
 
-        String number = values.getAsString(Contract.ContactEntry.COLUMN_PHONENUMBER);
+        String number = values.getAsString(Contact.ContactEntry.COLUMN_PHONENUMBER);
         if (number == null) {
             throw new IllegalArgumentException("number is required");
         }
 
-        String email = values.getAsString(Contract.ContactEntry.COLUMN_EMAIL);
+        String email = values.getAsString(Contact.ContactEntry.COLUMN_EMAIL);
         if (email == null) {
             throw new IllegalArgumentException("email is required");
         }
 
-        String work = values.getAsString(Contract.ContactEntry.COLUMN_WORKPLACE);
+        String work = values.getAsString(Contact.ContactEntry.COLUMN_WORKPLACE);
         if (work == null) {
             throw new IllegalArgumentException("workplace is required");
         }
 
-        String home = values.getAsString(Contract.ContactEntry.COLUMN_HOMEPLACE);
+        String home = values.getAsString(Contact.ContactEntry.COLUMN_HOMEPLACE);
         if (home == null) {
             throw new IllegalArgumentException("homeplace is required");
         }
 
-        String type = values.getAsString(Contract.ContactEntry.COLUMN_TYPEOFCONTACT);
-        if (type == null || !Contract.ContactEntry.isValidType(type)) { // 如果类型有错误，同样也不能执行插入
+        String type = values.getAsString(Contact.ContactEntry.COLUMN_TYPEOFCONTACT);
+        if (type == null || !Contact.ContactEntry.isValidType(type)) { // 如果类型有错误，同样也不能执行插入
             throw new IllegalArgumentException("type is required");
         }
 
         // 要插入新数据，所以要拿到可写的
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
-        long id = database.insert(Contract.ContactEntry.TABLE_NAME, null, values);
+        long id = database.insert(Contact.ContactEntry.TABLE_NAME, null, values);
 
         if (id == -1) {
             return null;
@@ -140,13 +136,13 @@ public class Provider extends ContentProvider {
         int match = sUriMatcher.match(uri);
         switch (match) {
             case CONTACTS:
-                rowsDeleted = database.delete(Contract.ContactEntry.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted = database.delete(Contact.ContactEntry.TABLE_NAME, selection, selectionArgs);
                 break;
 
             case CONTACTS_ID:
-                selection = Contract.ContactEntry._ID + "=?";
+                selection = Contact.ContactEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                rowsDeleted = database.delete(Contract.ContactEntry.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted = database.delete(Contact.ContactEntry.TABLE_NAME, selection, selectionArgs);
                 break;
 
             default:
@@ -170,7 +166,7 @@ public class Provider extends ContentProvider {
 
             case CONTACTS_ID:
 
-                selection = Contract.ContactEntry._ID + "=?";
+                selection = Contact.ContactEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 return updateContact(uri, values, selection, selectionArgs);
 
@@ -184,47 +180,47 @@ public class Provider extends ContentProvider {
     private int updateContact(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         String alteredName = "";
         String alteredPhone = "";
-        if (values.containsKey(Contract.ContactEntry.COLUMN_NAME)) {
-            String name = values.getAsString(Contract.ContactEntry.COLUMN_NAME);
+        if (values.containsKey(Contact.ContactEntry.COLUMN_NAME)) {
+            String name = values.getAsString(Contact.ContactEntry.COLUMN_NAME);
             alteredName = name;
             if (name == null) {
                 throw new IllegalArgumentException("Name is required");
             }
         }
 
-        if (values.containsKey(Contract.ContactEntry.COLUMN_PHONENUMBER)) {
+        if (values.containsKey(Contact.ContactEntry.COLUMN_PHONENUMBER)) {
 
-            String number = values.getAsString(Contract.ContactEntry.COLUMN_PHONENUMBER);
+            String number = values.getAsString(Contact.ContactEntry.COLUMN_PHONENUMBER);
             alteredPhone = number;
             if (number == null) {
                 throw new IllegalArgumentException("number is required");
             }
         }
 
-        if (values.containsKey(Contract.ContactEntry.COLUMN_EMAIL)) {
-            String email = values.getAsString(Contract.ContactEntry.COLUMN_EMAIL);
+        if (values.containsKey(Contact.ContactEntry.COLUMN_EMAIL)) {
+            String email = values.getAsString(Contact.ContactEntry.COLUMN_EMAIL);
             if (email == null) {
                 throw new IllegalArgumentException("email is required");
             }
         }
 
-        if (values.containsKey(Contract.ContactEntry.COLUMN_WORKPLACE)) {
-            String work = values.getAsString(Contract.ContactEntry.COLUMN_WORKPLACE);
+        if (values.containsKey(Contact.ContactEntry.COLUMN_WORKPLACE)) {
+            String work = values.getAsString(Contact.ContactEntry.COLUMN_WORKPLACE);
             if (work == null) {
                 throw new IllegalArgumentException("work place is required");
             }
         }
 
-        if (values.containsKey(Contract.ContactEntry.COLUMN_HOMEPLACE)) {
-            String home = values.getAsString(Contract.ContactEntry.COLUMN_HOMEPLACE);
+        if (values.containsKey(Contact.ContactEntry.COLUMN_HOMEPLACE)) {
+            String home = values.getAsString(Contact.ContactEntry.COLUMN_HOMEPLACE);
             if (home == null) {
                 throw new IllegalArgumentException("home place is required");
             }
         }
 
-        if (values.containsKey(Contract.ContactEntry.COLUMN_TYPEOFCONTACT)) {
-            String type = values.getAsString(Contract.ContactEntry.COLUMN_TYPEOFCONTACT);
-            if (type == null || !Contract.ContactEntry.isValidType(type)) {
+        if (values.containsKey(Contact.ContactEntry.COLUMN_TYPEOFCONTACT)) {
+            String type = values.getAsString(Contact.ContactEntry.COLUMN_TYPEOFCONTACT);
+            if (type == null || !Contact.ContactEntry.isValidType(type)) {
                 throw new IllegalArgumentException("type is required");
             }
         }
@@ -234,7 +230,7 @@ public class Provider extends ContentProvider {
         }
 
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
-        int rowsUpdated = database.update(Contract.ContactEntry.TABLE_NAME, values, selection, selectionArgs);
+        int rowsUpdated = database.update(Contact.ContactEntry.TABLE_NAME, values, selection, selectionArgs);
         if (rowsUpdated != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
             ContactModel newContact = new ContactModel(alteredName, alteredPhone, "已修改");

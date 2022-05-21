@@ -3,8 +3,8 @@ package com.example.mycontacts;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.support.annotation.Nullable;
-import com.example.mycontacts.Contract.ContactEntry;
+
+import com.example.mycontacts.Contact.ContactEntry;
 
 public class DbHelper extends SQLiteOpenHelper {
 

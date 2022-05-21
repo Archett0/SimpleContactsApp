@@ -3,9 +3,9 @@ package com.example.mycontacts;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-public final class Contract {
+public final class Contact {
 
-    public Contract() {
+    public Contact() {
 
     }
 

@@ -1,12 +1,9 @@
 package com.example.mycontacts;
 
-import static java.security.AccessController.getContext;
-
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
@@ -23,7 +20,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -42,7 +38,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     private Uri mPhotoUri;
     private Uri mCurrentContactUri;
-    private String mType = Contract.ContactEntry.TYPEOFCONTACT_PERSONAL;
+    private String mType = Contact.ContactEntry.TYPEOFCONTACT_PERSONAL;
     ImageView mPhoto;
     private boolean mContactHasChanged = false;
     Spinner mSpinner;
@@ -120,18 +116,18 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 String selection = (String) parent.getItemAtPosition(position);
                 if (!TextUtils.isEmpty(selection)) {
                     if (selection.equals(getString(R.string.homephone))) {
-                        mType = Contract.ContactEntry.TYPEOFCONTACT_HOME;
+                        mType = Contact.ContactEntry.TYPEOFCONTACT_HOME;
                     } else if (selection.equals(getString(R.string.workphone))) {
-                        mType = Contract.ContactEntry.TYPEOFCONTACT_WORK;
+                        mType = Contact.ContactEntry.TYPEOFCONTACT_WORK;
                     } else {
-                        mType = Contract.ContactEntry.TYPEOFCONTACT_PERSONAL;
+                        mType = Contact.ContactEntry.TYPEOFCONTACT_PERSONAL;
                     }
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                mType = Contract.ContactEntry.TYPEOFCONTACT_PERSONAL;
+                mType = Contact.ContactEntry.TYPEOFCONTACT_PERSONAL;
             }
         });
     }
@@ -256,7 +252,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 && TextUtils.isEmpty(phone)
                 && TextUtils.isEmpty(work)
                 && TextUtils.isEmpty(home)
-                && mType == Contract.ContactEntry.TYPEOFCONTACT_PERSONAL && mPhotoUri == null) {
+                && mType == Contact.ContactEntry.TYPEOFCONTACT_PERSONAL && mPhotoUri == null) {
 
             hasAllRequiredValues = true;
             return hasAllRequiredValues;
@@ -268,48 +264,48 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             Toast.makeText(this, "必须输入姓名", Toast.LENGTH_SHORT).show();
             return hasAllRequiredValues;
         } else {
-            values.put(Contract.ContactEntry.COLUMN_NAME, name);
+            values.put(Contact.ContactEntry.COLUMN_NAME, name);
         }
 
         if (TextUtils.isEmpty(email)) {
             Toast.makeText(this, "必须输入邮箱", Toast.LENGTH_SHORT).show();
             return hasAllRequiredValues;
         } else {
-            values.put(Contract.ContactEntry.COLUMN_EMAIL, email);
+            values.put(Contact.ContactEntry.COLUMN_EMAIL, email);
         }
 
         if (TextUtils.isEmpty(phone)) {
             Toast.makeText(this, "必须输入电话号码", Toast.LENGTH_SHORT).show();
             return hasAllRequiredValues;
         } else {
-            values.put(Contract.ContactEntry.COLUMN_PHONENUMBER, phone);
+            values.put(Contact.ContactEntry.COLUMN_PHONENUMBER, phone);
         }
 
         if (TextUtils.isEmpty(work)) {
             Toast.makeText(this, "必须输入工作单位", Toast.LENGTH_SHORT).show();
             return hasAllRequiredValues;
         } else {
-            values.put(Contract.ContactEntry.COLUMN_WORKPLACE, work);
+            values.put(Contact.ContactEntry.COLUMN_WORKPLACE, work);
         }
 
         if (TextUtils.isEmpty(home)) {
             Toast.makeText(this, "必须输入家庭住址", Toast.LENGTH_SHORT).show();
             return hasAllRequiredValues;
         } else {
-            values.put(Contract.ContactEntry.COLUMN_HOMEPLACE, home);
+            values.put(Contact.ContactEntry.COLUMN_HOMEPLACE, home);
         }
 
         // 可选参数
-        values.put(Contract.ContactEntry.COLUMN_TYPEOFCONTACT, mType);
+        values.put(Contact.ContactEntry.COLUMN_TYPEOFCONTACT, mType);
 
         if(mPhotoUri == null){
-            values.put(Contract.ContactEntry.COLUMN_PICTURE, "");
+            values.put(Contact.ContactEntry.COLUMN_PICTURE, "");
         } else {
-            values.put(Contract.ContactEntry.COLUMN_PICTURE, mPhotoUri.toString());
+            values.put(Contact.ContactEntry.COLUMN_PICTURE, mPhotoUri.toString());
         }
 
         if (mCurrentContactUri == null) {
-            Uri newUri = getContentResolver().insert(Contract.ContactEntry.CONTENT_URI, values);
+            Uri newUri = getContentResolver().insert(Contact.ContactEntry.CONTENT_URI, values);
             if (newUri == null) {
                 Toast.makeText(this, "保存出错", Toast.LENGTH_SHORT).show();
             } else {
@@ -332,14 +328,14 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-        String[] projection = {Contract.ContactEntry._ID,
-                Contract.ContactEntry.COLUMN_NAME,
-                Contract.ContactEntry.COLUMN_EMAIL,
-                Contract.ContactEntry.COLUMN_PICTURE,
-                Contract.ContactEntry.COLUMN_PHONENUMBER,
-                Contract.ContactEntry.COLUMN_WORKPLACE,
-                Contract.ContactEntry.COLUMN_HOMEPLACE,
-                Contract.ContactEntry.COLUMN_TYPEOFCONTACT
+        String[] projection = {Contact.ContactEntry._ID,
+                Contact.ContactEntry.COLUMN_NAME,
+                Contact.ContactEntry.COLUMN_EMAIL,
+                Contact.ContactEntry.COLUMN_PICTURE,
+                Contact.ContactEntry.COLUMN_PHONENUMBER,
+                Contact.ContactEntry.COLUMN_WORKPLACE,
+                Contact.ContactEntry.COLUMN_HOMEPLACE,
+                Contact.ContactEntry.COLUMN_TYPEOFCONTACT
         };
 
         return new CursorLoader(this, mCurrentContactUri,
@@ -357,13 +353,13 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         if (cursor.moveToFirst()) {
             // 获取每列的位置
-            int name = cursor.getColumnIndex(Contract.ContactEntry.COLUMN_NAME);
-            int email = cursor.getColumnIndex(Contract.ContactEntry.COLUMN_EMAIL);
-            int type = cursor.getColumnIndex(Contract.ContactEntry.COLUMN_TYPEOFCONTACT);
-            int number = cursor.getColumnIndex(Contract.ContactEntry.COLUMN_PHONENUMBER);
-            int work = cursor.getColumnIndex(Contract.ContactEntry.COLUMN_WORKPLACE);
-            int home = cursor.getColumnIndex(Contract.ContactEntry.COLUMN_HOMEPLACE);
-            int picture = cursor.getColumnIndex(Contract.ContactEntry.COLUMN_PICTURE);
+            int name = cursor.getColumnIndex(Contact.ContactEntry.COLUMN_NAME);
+            int email = cursor.getColumnIndex(Contact.ContactEntry.COLUMN_EMAIL);
+            int type = cursor.getColumnIndex(Contact.ContactEntry.COLUMN_TYPEOFCONTACT);
+            int number = cursor.getColumnIndex(Contact.ContactEntry.COLUMN_PHONENUMBER);
+            int work = cursor.getColumnIndex(Contact.ContactEntry.COLUMN_WORKPLACE);
+            int home = cursor.getColumnIndex(Contact.ContactEntry.COLUMN_HOMEPLACE);
+            int picture = cursor.getColumnIndex(Contact.ContactEntry.COLUMN_PICTURE);
 
             String contactname = cursor.getString(name);
             String contactemail = cursor.getString(email);
@@ -382,11 +378,11 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             mPhoto.setImageURI(mPhotoUri);
 
             switch (typeof) {
-                case Contract.ContactEntry.TYPEOFCONTACT_HOME:
+                case Contact.ContactEntry.TYPEOFCONTACT_HOME:
                     mSpinner.setSelection(1);
                     break;
 
-                case Contract.ContactEntry.TYPEOFCONTACT_WORK:
+                case Contact.ContactEntry.TYPEOFCONTACT_WORK:
                     mSpinner.setSelection(2);
                     break;
 

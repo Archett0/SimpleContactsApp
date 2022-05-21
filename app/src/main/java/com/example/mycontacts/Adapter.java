@@ -34,13 +34,13 @@ public class Adapter extends CursorAdapter {
         typeofContactView = view.findViewById(R.id.textTypeofContact);
         mContactImageView = view.findViewById(R.id.imageContact);
         /// 获取View的位置
-        int name = cursor.getColumnIndex(Contract.ContactEntry.COLUMN_NAME);
-        int email = cursor.getColumnIndex(Contract.ContactEntry.COLUMN_EMAIL);
-        int type = cursor.getColumnIndex(Contract.ContactEntry.COLUMN_TYPEOFCONTACT);
-        int number = cursor.getColumnIndex(Contract.ContactEntry.COLUMN_PHONENUMBER);
-        int work = cursor.getColumnIndex(Contract.ContactEntry.COLUMN_WORKPLACE);
-        int home = cursor.getColumnIndex(Contract.ContactEntry.COLUMN_HOMEPLACE);
-        int picture = cursor.getColumnIndex(Contract.ContactEntry.COLUMN_PICTURE);
+        int name = cursor.getColumnIndex(Contact.ContactEntry.COLUMN_NAME);
+        int email = cursor.getColumnIndex(Contact.ContactEntry.COLUMN_EMAIL);
+        int type = cursor.getColumnIndex(Contact.ContactEntry.COLUMN_TYPEOFCONTACT);
+        int number = cursor.getColumnIndex(Contact.ContactEntry.COLUMN_PHONENUMBER);
+        int work = cursor.getColumnIndex(Contact.ContactEntry.COLUMN_WORKPLACE);
+        int home = cursor.getColumnIndex(Contact.ContactEntry.COLUMN_HOMEPLACE);
+        int picture = cursor.getColumnIndex(Contact.ContactEntry.COLUMN_PICTURE);
 
         String contactname = cursor.getString(name);
         String contactemail = cursor.getString(email);
