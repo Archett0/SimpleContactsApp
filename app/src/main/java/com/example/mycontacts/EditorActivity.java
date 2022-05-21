@@ -104,6 +104,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         setUpSpinner();
     }
 
+    // 设置下拉选择框
     private void setUpSpinner() {
 
         ArrayAdapter spinner = ArrayAdapter.createFromResource(this, R.array.arrayspinner, android.R.layout.simple_spinner_item);
@@ -188,7 +189,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menueditor, menu);
         return true;
-
     }
 
     @Override

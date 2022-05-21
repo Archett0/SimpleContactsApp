@@ -173,9 +173,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         // 激活Loader
         getLoaderManager().initLoader(CONTACTLOADER, null, this);
-
-        // Timer&Toast
-
     }
 
     @Override
@@ -208,7 +205,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
         mAdapter.swapCursor(null);
     }
 

@@ -17,7 +17,7 @@ public class Provider extends ContentProvider {
 
     static {
         sUriMatcher.addURI(Contact.CONTENT_AUTHORITY, Contact.PATH_CONTACTS, CONTACTS);
-        sUriMatcher.addURI(Contact.CONTENT_AUTHORITY, Contact.PATH_CONTACTS + "/#", CONTACTS_ID); // 代表列名的#
+        sUriMatcher.addURI(Contact.CONTENT_AUTHORITY, Contact.PATH_CONTACTS + "/#", CONTACTS_ID); // #为通配符,此处找联系人ID
     }
 
     public DbHelper mDbHelper;  // DhHelper

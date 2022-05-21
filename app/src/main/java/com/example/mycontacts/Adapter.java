@@ -33,7 +33,7 @@ public class Adapter extends CursorAdapter {
         homeView = view.findViewById(R.id.textHome);
         typeofContactView = view.findViewById(R.id.textTypeofContact);
         mContactImageView = view.findViewById(R.id.imageContact);
-        /// 获取View的位置
+        /// 获取Column的位置
         int name = cursor.getColumnIndex(Contact.ContactEntry.COLUMN_NAME);
         int email = cursor.getColumnIndex(Contact.ContactEntry.COLUMN_EMAIL);
         int type = cursor.getColumnIndex(Contact.ContactEntry.COLUMN_TYPEOFCONTACT);
@@ -41,7 +41,7 @@ public class Adapter extends CursorAdapter {
         int work = cursor.getColumnIndex(Contact.ContactEntry.COLUMN_WORKPLACE);
         int home = cursor.getColumnIndex(Contact.ContactEntry.COLUMN_HOMEPLACE);
         int picture = cursor.getColumnIndex(Contact.ContactEntry.COLUMN_PICTURE);
-
+        // 取值
         String contactname = cursor.getString(name);
         String contactemail = cursor.getString(email);
         String contactnumber = cursor.getString(number);
@@ -50,7 +50,7 @@ public class Adapter extends CursorAdapter {
         String contactpicture = cursor.getString(picture);
         String typeof = cursor.getString(type);
         Uri imageUri = Uri.parse(contactpicture);
-
+        // 注入值
         nameView.setText(contactname);
         numberView.setText(contactnumber);
         typeofContactView.setText(typeof);
